@@ -265,7 +265,9 @@ defineModule(sim, list(
                               "the entire `P(sim)$sppEquivCol` column in `sppEquiv`.",
                               "See `LandR::sppEquivalencies_CA`.")),
     expectsInput("standAgeMap", "RasterLayer",
-                 desc =  paste("stand age map in study area.",
+                 desc =  paste("stand age map in study area. Must have a 'imputedPixID' attribute (a  vector of pixel IDs)",
+                               "indicating which pixels suffered age imputation. If no pixel ages were imputed, please set",
+                               "this attribute to `integer(0)`.",
                                "Defaults to the Canadian Forestry Service, National Forest Inventory,",
                                "kNN-derived biomass map from 2001, unless 'dataYear' != 2001.",
                                "See https://open.canada.ca/data/en/dataset/ec9e2659-1c29-4ddb-87a2-6aced147a990 for metadata"),
@@ -1543,13 +1545,7 @@ Save <- function(sim) {
                              omitArgs = c("destinationPath", "targetFile", "overwrite",
                                           "alsoExtract", "userTags"))
     options(opt)
-    LandR::assertStandAgeMapAttr(sim$standAgeMap)
-    sim$imputedPixID <- attr(sim$standAgeMap, "imputedPixID")
-    # })
-  } else {
-    if (P(sim)$overrideAgeInFires) {
-      sim$standAgeMap <- replaceAgeInFires(sim$standAgeMap, sim$firePerimeters, start(sim))
-    }
+        # })
   }
 
   LandR::assertStandAgeMapAttr(sim$standAgeMap)
@@ -1570,6 +1566,9 @@ Save <- function(sim) {
     attr(sim$standAgeMap, "imputedPixID") <- sim$imputedPixID
   }
 
+  if (P(sim)$overrideAgeInFires) {
+    sim$standAgeMap <- replaceAgeInFires(sim$standAgeMap, sim$firePerimeters, start(sim))
+  }
   ## Species equivalencies table and associated columns ----------------------------
   ## make sppEquiv table and associated columns, vectors
   ## do not use suppliedElsewhere here as we need the tables to exist (or not)
