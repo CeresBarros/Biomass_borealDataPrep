@@ -299,7 +299,7 @@ defineModule(sim, list(
                                "fire-related imputed ages, correct for missing values or for 0 age/cover), land cover (to convert",
                                "non-forested classes into to nearest forested class)")),
     createsOutput("pixelGroupMap", "RasterLayer",
-                  desc = "initial community map that has mapcodes (`pixelGroup` IDs) match `cohortData`"),
+                  desc = "initial community map that has mapcodes (`pixelGroup` IDs) matching `cohortData`"),
     createsOutput("pixelFateDT", "data.table",
                   desc = paste("A small table that keeps track of the pixel removals and cause. This may help diagnose issues",
                                "related to understanding the creation of `cohortData`")),
