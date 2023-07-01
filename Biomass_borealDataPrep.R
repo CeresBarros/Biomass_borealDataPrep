@@ -1503,13 +1503,14 @@ Save <- function(sim) {
       on.exit(options(opt), add = TRUE)
       sim$firePerimeters <- Cache(prepInputsFireYear,
                                   destinationPath =  asPath(getOption("reproducible.destinationPath", dataPath(sim)), 1),
-                                  studyArea = raster::aggregate(sim$studyArea),
+                                  # studyArea = raster::aggregate(sim$studyArea),  ## workaround Jun 2023 - crop error
                                   rasterToMatch = sim$rasterToMatchLarge,
                                   overwrite = TRUE,
                                   url = extractURL("firePerimeters"),
                                   fireField = "YEAR",
                                   fun = "sf::st_read",
                                   userTags = c(cacheTags, "firePerimeters"))
+      sim$firePerimers <- mask(sim$firePerimeters, sim$rasterToMatchLarge)   ## workaround Jun 2023 - crop error
       options(opt)
     }
   }
